@@ -10,8 +10,8 @@ const routes: Routes = [
 {
   path:'',
   children:[
-    {path:'', component:FullScreenComponent},
-    {path:'zoon-range', component:ZoonRangeComponent},
+    {path:'fullscreen', component:FullScreenComponent},
+    {path:'zoom-range', component:ZoonRangeComponent},
     {path:'marcadores', component:MarcadoresComponent},
     {path:'propiedades', component:PropiedadesComponent},
     {path:'**', redirectTo:'fullscreen'}
