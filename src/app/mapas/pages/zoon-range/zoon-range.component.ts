@@ -9,6 +9,7 @@ import * as mapboxgl from 'mapbox-gl';
 export class ZoonRangeComponent implements AfterViewInit {
 
 mapa!:mapboxgl.Map;
+zoomLevel:number=10;
 
 @ViewChild('mapa') divMapa!:ElementRef
 
@@ -25,18 +26,22 @@ mapa!:mapboxgl.Map;
       container: this.divMapa.nativeElement, // container ID
       style: 'mapbox://styles/mapbox/streets-v11', // style URL
       center:[-6.0761996, 37.41285254336611],
-      zoom:15
+      zoom:this.zoomLevel
     });
   }
 
   zoomOut(){
     console.log('zoom Out', this.divMapa);
     this.mapa.zoomOut();
+
+    this.zoomLevel = this.mapa.getZoom();
   }
 
   zoomIn(){
     console.log('zoom Out');
     this.mapa.zoomIn();
+
+    this.zoomLevel = this.mapa.getZoom();
   }
 
 }
