@@ -28,20 +28,29 @@ zoomLevel:number=10;
       center:[-6.0761996, 37.41285254336611],
       zoom:this.zoomLevel
     });
+
+    //implementar un listener para ver cuando el zoom cambia
+    this.mapa.on('zoom', (ev)=>{
+      // console.log('zoom Prueba');
+      // console.log('Evento obtenido',ev);
+      //const zoomActual = this.mapa.getZoom();
+      this.zoomLevel = this.mapa.getZoom();
+      //console.log(zoomActual);
+    })
   }
 
   zoomOut(){
-    console.log('zoom Out', this.divMapa);
+    //console.log('zoom Out', this.divMapa);
     this.mapa.zoomOut();
 
-    this.zoomLevel = this.mapa.getZoom();
+
   }
 
   zoomIn(){
-    console.log('zoom Out');
+    //console.log('zoom Out');
     this.mapa.zoomIn();
 
-    this.zoomLevel = this.mapa.getZoom();
+
   }
 
 }
