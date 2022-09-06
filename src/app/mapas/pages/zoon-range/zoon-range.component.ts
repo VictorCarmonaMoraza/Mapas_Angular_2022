@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import * as mapboxgl from 'mapbox-gl';
 
 @Component({
@@ -6,16 +6,25 @@ import * as mapboxgl from 'mapbox-gl';
   templateUrl: './zoon-range.component.html',
   styleUrls: ['./zoon-range.component.css']
 })
-export class ZoonRangeComponent implements AfterViewInit {
+export class ZoonRangeComponent implements AfterViewInit, OnDestroy {
 
   mapa!: mapboxgl.Map;
   zoomLevel: number = 10;
 
   @ViewChild('mapa') divMapa!: ElementRef
 
+  center: [number, number] = [-6.0761996, 37.41285254336611]
+
   constructor() {
     //console.log('constructor',this.divMapa)
 
+  }
+
+  ngOnDestroy(): void {
+    //Destruimos los listenmer para que toda la instancia se cree de nuevo
+    this.mapa.off('zoom', ()=>{});
+    this.mapa.off('zoomend', ()=>{});
+    this.mapa.off('move', ()=>{});
   }
   //Se ejecuta despues de que la vista ha sido inicializado
   ngAfterViewInit(): void {
@@ -25,7 +34,7 @@ export class ZoonRangeComponent implements AfterViewInit {
     this.mapa = new mapboxgl.Map({
       container: this.divMapa.nativeElement, // container ID
       style: 'mapbox://styles/mapbox/streets-v11', // style URL
-      center: [-6.0761996, 37.41285254336611],
+      center: this.center,
       zoom: this.zoomLevel
     });
 
@@ -44,6 +53,18 @@ export class ZoonRangeComponent implements AfterViewInit {
         //Ir al zoom en 18
         this.mapa.zoomTo(18);
       }
+    });
+
+    //Movimineto del mapa
+    this.mapa.on('move', (event)=>{
+      const target = event.target;
+      //Desestructuro la longitud y latitud que viene del target.getCenter
+      const {lng, lat} = target.getCenter();
+      this.center=[lng,lat];
+
+      // target.getCenter;
+      // console.log(event);
+      // console.log(target.getCenter())
     })
   }
 
