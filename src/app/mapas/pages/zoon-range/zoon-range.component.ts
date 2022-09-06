@@ -8,10 +8,10 @@ import * as mapboxgl from 'mapbox-gl';
 })
 export class ZoonRangeComponent implements AfterViewInit {
 
-mapa!:mapboxgl.Map;
-zoomLevel:number=10;
+  mapa!: mapboxgl.Map;
+  zoomLevel: number = 10;
 
-@ViewChild('mapa') divMapa!:ElementRef
+  @ViewChild('mapa') divMapa!: ElementRef
 
   constructor() {
     //console.log('constructor',this.divMapa)
@@ -20,37 +20,50 @@ zoomLevel:number=10;
   //Se ejecuta despues de que la vista ha sido inicializado
   ngAfterViewInit(): void {
 
-    console.log('after',this.divMapa);
+    console.log('after', this.divMapa);
 
     this.mapa = new mapboxgl.Map({
       container: this.divMapa.nativeElement, // container ID
       style: 'mapbox://styles/mapbox/streets-v11', // style URL
-      center:[-6.0761996, 37.41285254336611],
-      zoom:this.zoomLevel
+      center: [-6.0761996, 37.41285254336611],
+      zoom: this.zoomLevel
     });
 
     //implementar un listener para ver cuando el zoom cambia
-    this.mapa.on('zoom', (ev)=>{
+    this.mapa.on('zoom', (ev) => {
       // console.log('zoom Prueba');
       // console.log('Evento obtenido',ev);
       //const zoomActual = this.mapa.getZoom();
       this.zoomLevel = this.mapa.getZoom();
       //console.log(zoomActual);
+    });
+
+    //si nos pasamos el zoom a mas de 18 lo establcemos en 18
+    this.mapa.on('zoomend', (ev) => {
+      if (this.mapa.getZoom() > 18) {
+        //Ir al zoom en 18
+        this.mapa.zoomTo(18);
+      }
     })
   }
 
-  zoomOut(){
+  zoomOut() {
     //console.log('zoom Out', this.divMapa);
     this.mapa.zoomOut();
 
 
   }
 
-  zoomIn(){
+  zoomIn() {
     //console.log('zoom Out');
     this.mapa.zoomIn();
 
 
+  }
+
+  zoomCambio(valor: string) {
+    console.log(valor);
+    this.mapa.zoomTo(Number(valor));
   }
 
 }
